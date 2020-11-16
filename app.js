@@ -8,8 +8,7 @@ const mongoose = require('mongoose');
 // Manage Security :
 //  * https://expressjs.com/en/advanced/best-practice-security.html
 //  * https://blog.risingstack.com/node-js-security-checklist/
-
-
+const helmet = require('helmet');
 
 // Database Connection
 const configdb = require('./config/database');
@@ -22,6 +21,9 @@ db.on('error', (err) => console.log(err))
 
 // Init App
 const app = express();
+
+// Activate security protection
+app.use(helmet);
 
 // Load View Engine
 app.set('views', path.join(__dirname, 'views'));
