@@ -23,7 +23,7 @@ db.on('error', (err) => console.log(err))
 const app = express();
 
 // Activate security protection
-app.use(helmet);
+app.use(helmet());
 
 // Load View Engine
 app.set('views', path.join(__dirname, 'views'));
