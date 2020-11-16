@@ -9,10 +9,12 @@ html
     link(rel='stylesheet' href='/css/style.css')
 
   body
-    nav.navbar.navbar-expand-md.navbar-dark.bg-dark
-        a.navbar-brand(href='#') KnowledgeBase
-        button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarCollapse' aria-controls='navbarCollapse' aria-expanded='false' aria-label='Toggle navigation')
-            span.navbar-toggler-icon
+    nav.navbar.navbar-inverse.navbar-expand-md.navbar-dark.bg-dark
+      .container
+        .navbar-header
+            a.navbar-brand(href='#') KnowledgeBase
+            button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarCollapse' aria-controls='navbarCollapse' aria-expanded='false' aria-label='Toggle navigation')
+                span.navbar-toggler-icon
         #navbarCollapse.collapse.navbar-collapse
             ul.nav.navbar-nav.mr-auto
                 li.nav-item
@@ -21,6 +23,15 @@ html
                       span.sr-only (current)
                 li.nav-item
                     a.nav-link(href='/articles/add') Add Article
+            ul.nav.navbar-nav.navbar-right
+                if user
+                  li.nav-item
+                    a.nav-link(href='/users/logout') Logout
+                else
+                  li.nav-item
+                    a.nav-link(href='/users/register') Register
+                  li.nav-item
+                    a.nav-link(href='/users/login') Login
 
     .container
       != messages('message', locals)

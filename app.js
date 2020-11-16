@@ -1,14 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const passport = require('passport');
 const path = require('path');
 const mongoose = require('mongoose');
 
 // Database Connection
-mongoose.connect('mongodb://localhost:27017/nodekb', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-});
+const configdb = require('./config/database');
+mongoose.connect(configdb.database, configdb.options);
 let db = mongoose.connection;
 // Check connection
 db.once('open', (err) => console.log('Connected to MOngoDB'))
@@ -44,6 +43,17 @@ app.use(function (req, res, next) {
   next();
 });
 
+// Passport Config
+require('./config/passport')(passport);
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get('*', (req, res, next) => {
+    res.locals.user = req.user || null;
+    next();
+})
+
+
 // Bring in Article Model
 let Article = require('./models/article');
 
@@ -65,6 +75,8 @@ app.get('/', (req , res) => {
 // Route files
 let articles = require('./routes/articles');
 app.use('/articles', articles);
+let users = require('./routes/users');
+app.use('/users', users);
 
 // Start Server
 const port = process.env.PORT || 3000;
