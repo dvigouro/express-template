@@ -1,0 +1,11 @@
+extends layout
+
+block content
+    h1= article.title
+    h5 Written by #{article.author}
+    p= article.body
+    hr
+    div.d-flex
+        a.btn.btn-default(href='/articles/edit/'+article._id) Edit
+        form(method='POST', action='/articles/'+article._id+'?_method=DELETE')
+            input.btn.btn-danger(type='submit', value='Delete')

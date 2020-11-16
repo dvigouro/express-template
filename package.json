@@ -1,0 +1,27 @@
+{
+  "name": "express-from-scratch",
+  "version": "1.0.0",
+  "description": "Author : Traversy Media\r URL : https://www.youtube.com/watch?v=sB3acNJeNKE",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "connect-flash": "^0.1.1",
+    "express": "^4.17.1",
+    "express-messages": "^1.0.1",
+    "express-session": "^1.17.1",
+    "express-validator": "^6.6.1",
+    "method-override": "^3.0.0",
+    "mongoose": "^5.10.14",
+    "pug": "^3.0.0"
+  }
+}
