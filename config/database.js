@@ -1,6 +1,9 @@
+// Load Mongodb parameters
+require('dotenv').config()
+
 module.exports = {
-    database: 'mongodb://localhost:27017/nodekb',
-    secret: 'My Secret',
+    database: process.env.MONGODB_URI,
+    secret: process.env.MONGODB_SECRET,
     options: {
         useNewUrlParser: true,
         useUnifiedTopology: true

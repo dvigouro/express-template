@@ -5,6 +5,12 @@ const passport = require('passport');
 const path = require('path');
 const mongoose = require('mongoose');
 
+// Manage Security :
+//  * https://expressjs.com/en/advanced/best-practice-security.html
+//  * https://blog.risingstack.com/node-js-security-checklist/
+
+
+
 // Database Connection
 const configdb = require('./config/database');
 mongoose.connect(configdb.database, configdb.options);
