@@ -11,6 +11,7 @@ Original idea coming form
   * Set-up environment variables
 
 # TODOs
+ * Error handling Code Factorization with http-errors : https://zellwk.com/blog/express-errors/
  * Continue Security enhancement: https://expressjs.com/en/advanced/best-practice-security.html
  * Apply Node.js best practices : https://expressjs.com/en/advanced/best-practice-performance.html
  * Logging & debugging
