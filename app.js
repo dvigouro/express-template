@@ -15,12 +15,25 @@ const configdb = require('./config/database');
 mongoose.connect(configdb.database, configdb.options);
 let db = mongoose.connection;
 // Check connection
-db.once('open', (err) => console.log('Connected to MOngoDB'))
+db.once('open', (err) => log.info('Connected to MOngoDB'));
 // Check DB errors
-db.on('error', (err) => console.log(err))
+db.on('error', (err) => log.error(err));
+
+// Create logger
+const log = require('./config/logger');
+// Use uuid to identify the request/response in logs
+const uuid = require('uuid');
 
 // Init App
 const app = express();
+
+// Create request/response logger
+// app.use( (req, res, next) => {
+//     req.log = log.child({ req_id: uuid.v4()}, true);
+//     req.log.info({ req });
+//     res.on('finish', () => req.log.info({ res }));
+//     next();
+// });
 
 // Activate security protection
 app.use(helmet());
@@ -61,7 +74,6 @@ app.get('*', (req, res, next) => {
     next();
 })
 
-
 // Bring in Article Model
 let Article = require('./models/article');
 
@@ -69,7 +81,7 @@ let Article = require('./models/article');
 app.get('/', (req , res) => {
     let articles = Article.find({}, (err, articles) => {
         if (err) {
-            console.log(err)
+            log.error(err)
         }
         else {
             res.render('index', {
@@ -86,9 +98,16 @@ app.use('/articles', articles);
 let users = require('./routes/users');
 app.use('/users', users);
 
+// Catch any errors
+app.use( (err, req, res, next) => {
+    req.log.error({ err });
+    return res.status(500).json('Internal Server Error');
+    //res.render('error');
+})
+
 // Start Server
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
-    console.log(`Server started on port ${port}`)
+    log.info(`Server started on port ${port}`)
 });

@@ -7,6 +7,9 @@ router.use(methodOverride('_method'));
 
 const { body, validationResult } = require('express-validator');
 
+// Import logger
+const log = require('../config/logger');
+
 // Bring in Article Model
 let Article = require('../models/article');
 // Bring in the User Model
@@ -41,7 +44,7 @@ router.post('/add', ensureAuthenticated, [
 
         article.save( (err) => {
             if (err) {
-                console.log(err);
+                log.error(err);
                 req.flash('danger', 'Cannot Add Article');
                 res.redirect('/');
             }
@@ -57,7 +60,7 @@ router.post('/add', ensureAuthenticated, [
 router.get('/edit/:id', ensureAuthenticated, (req, res) => {
     Article.findById(req.params.id, (err, article) => {
         if (err) {
-            console.log(err);
+            log.error(err);
             req.flash('danger', 'Cannot Edit Article');
             res.redirect('/');
         }
@@ -96,7 +99,7 @@ router.post('/edit/:id', ensureAuthenticated, [
 
         Article.updateOne(query, article, (err, article) => {
             if (err) {
-                console.log(err);
+                log.error(err);
                 req.flash('danger', 'Cannot Update Article');
                 res.redirect('/');
             }
@@ -130,7 +133,7 @@ router.delete('/:id', ensureAuthenticated, (req, res) => {
                 else {
                     Article.deleteOne(query, (err) =>{
                         if (err) {
-                            console.log(err);
+                            log.error(err);
                             req.flash('danger', 'Cannot Delete Article');
                             res.redirect('/');
                         }
@@ -150,14 +153,14 @@ router.delete('/:id', ensureAuthenticated, (req, res) => {
 router.get('/:id', (req, res) => {
     Article.findById(req.params.id, (err, article) => {
         if (err) {
-            console.log(err);
+            log.error(err);
             req.flash('danger', 'Cannot Display Article');
             res.redirect('/')
         }
         else {
             User.findById(article.author, (err, user) => {
                 if (err) {
-                    console.log(err);
+                    log.error(err);
                     req.flash('Author not found');
                     res.redirect('/');
                 }

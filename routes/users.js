@@ -39,7 +39,6 @@ router.post('/register', [
             }
         })        
     ], (req, res) => {
-        console.log('POST USER CREATION');
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             res.render('register', {
@@ -57,7 +56,7 @@ router.post('/register', [
             bcrypt.genSalt(10, (err, salt) => {
                 bcrypt.hash(user.password, salt, (err, hash) => {
                     if (err) {
-                        console.log(err);
+                        log.error(err);
                         req.flash('danger', 'Cannot generate hash for the password')
                         res.redirect('/');
                     }
@@ -66,7 +65,7 @@ router.post('/register', [
 
                         user.save( (err) => {
                             if (err) {
-                                console.log(err);
+                                log.error(err);
                                 req.flash('danger', 'Cannot Add User');
                                 res.redirect('/');
                             }
