@@ -86,7 +86,6 @@ router.post('/edit/:id', ensureAuthenticated, [
     ], (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        //res.status(200).json(errors.array()[0].msg)
         req.flash('danger', errors.array()[0].msg);
         res.redirect('/articles/edit/'+req.params.id);
     }

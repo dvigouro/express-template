@@ -24,16 +24,27 @@ const log = require('./config/logger');
 // Use uuid to identify the request/response in logs
 const uuid = require('uuid');
 
+// http://expressjs.com/en/resources/middleware/errorhandler.html
+// This middleware is only intended to be used in a development environment, 
+// as the full error stack traces and internal details of any object passed
+// to this module will be sent back to the client when an error occur
+const errorhandler = require("errorhandler");
+
 // Init App
 const app = express();
 
+// Activate the extended error trace in development
+if (process.env.NODE_ENV !== 'production') {
+    app.use(errorhandler())
+}
+
 // Create request/response logger
-// app.use( (req, res, next) => {
-//     req.log = log.child({ req_id: uuid.v4()}, true);
-//     req.log.info({ req });
-//     res.on('finish', () => req.log.info({ res }));
-//     next();
-// });
+app.use( (req, res, next) => {
+    req.log = log.child({ req_id: uuid.v4()}, true);
+    req.log.info({ req });
+    res.on('finish', () => req.log.info({ res }));
+    next();
+});
 
 // Activate security protection
 app.use(helmet());
@@ -98,12 +109,26 @@ app.use('/articles', articles);
 let users = require('./routes/users');
 app.use('/users', users);
 
+// Generate a fake error
+app.get("/error", (req, res, next) => {
+    if (process.env.NODE_ENV !== 'production') {
+        throw new Error("Something went wrong");
+    }
+    next();
+});
+
 // Catch any errors
 app.use( (err, req, res, next) => {
     req.log.error({ err });
-    return res.status(500).json('Internal Server Error');
-    //res.render('error');
-})
+    res.render('error', {
+        exception: err.message
+    });
+});
+
+// Last Route to catch 404 Not found errors
+app.use( (req, res, next) => {
+    res.status(404).render('404');
+});
 
 // Start Server
 const port = process.env.PORT || 3000;
@@ -111,3 +136,5 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
     log.info(`Server started on port ${port}`)
 });
+
+module.exports = app;
